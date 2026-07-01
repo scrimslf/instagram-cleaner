@@ -1,0 +1,30 @@
+name: Build Android APK
+
+# Build the Kivy app in mobile/ into a debug APK on GitHub's Linux runners.
+# Runs on manual trigger, or when anything under mobile/ changes.
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "mobile/**"
+      - ".github/workflows/build-apk.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build the APK with Buildozer
+        uses: ArtemSBulgakov/buildozer-action@v1
+        with:
+          workdir: mobile
+          command: buildozer android debug
+
+      - name: Upload the APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: instacleaner-debug-apk
+          path: mobile/bin/*.apk
+          if-no-files-found: error
