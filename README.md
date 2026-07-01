@@ -148,9 +148,13 @@ All of the above are in `.gitignore`.
   for the pinned deps. This project uses `instagrapi>=2.18` + `pydantic>=2.9`
   specifically to avoid that.
 
-## Roadmap: mobile app
+## Mobile app (Android)
 
-A mobile version is planned. Honest notes on feasibility:
+An experimental Kivy-based Android app lives in [`mobile/`](mobile/). The source
+is ready to build into an APK (via Docker); see `mobile/README.md`. It runs the
+same logic on your phone, so it uses your phone's residential IP.
+
+Honest notes on feasibility:
 
 - **Android (.apk): feasible.** The logic can be wrapped with
   [Kivy](https://kivy.org) + `buildozer` (or BeeWare) so `instagrapi` runs
