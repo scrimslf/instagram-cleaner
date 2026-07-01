@@ -196,8 +196,11 @@ class App:
                 self.root.after(0, fill)
                 self.log(f"Session imported from {browser}. Now click Connect.")
             else:
-                self.log("No Instagram session found. Log into instagram.com in your "
-                         "browser first, or paste the session id manually.")
+                self.log("No Instagram session found. Either you're not logged into "
+                         "instagram.com in a supported browser, or your browser (recent "
+                         "Brave/Chrome) encrypts cookies in a way that can't be read. "
+                         "Easiest fix: paste the session id manually (click 'How?'), or "
+                         "log into Instagram in Firefox.")
             self.root.after(0, lambda: self.connect_btn.configure(state="normal"))
 
         threading.Thread(target=work, daemon=True).start()
