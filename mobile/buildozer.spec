@@ -15,7 +15,7 @@ version = 1.0.0
 # NOTE: instagrapi 1.x + pydantic 1.x are used on purpose. pydantic 2.x ships a
 # Rust extension (pydantic-core) that python-for-android cannot build. The 1.x
 # stack is pure Python and packages cleanly for Android.
-requirements = python3,kivy,pillow,requests,urllib3,idna,certifi,charset-normalizer,pysocks,pydantic==1.10.19,instagrapi==1.19.8
+requirements = python3,kivy,kivymd==1.2.0,pillow,requests,urllib3,idna,certifi,charset-normalizer,pysocks,pydantic==1.10.19,instagrapi==1.19.8
 
 orientation = portrait
 fullscreen = 0

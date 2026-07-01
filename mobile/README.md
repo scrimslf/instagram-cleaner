@@ -4,10 +4,11 @@ A [Kivy](https://kivy.org) front-end that runs the same cleanup logic **on your
 phone**, so actions use your phone's residential IP (much less likely to be
 blocked than a server).
 
-> ⚠️ **Status: source is ready to build, but not yet compiled/verified into an
-> APK.** Building an Android APK needs a Linux toolchain (Android SDK/NDK). The
-> easiest path is the official Docker image — no local setup beyond Docker.
-> Same Instagram Terms-of-Service risk as the desktop version applies.
+> ✅ **Status: builds successfully.** A debug APK is produced automatically by
+> GitHub Actions (`.github/workflows/build-apk.yml`) on every change here — grab
+> it from the workflow run's Artifacts. You can also build locally (below).
+> The UI uses Material Design (KivyMD). Same Instagram Terms-of-Service risk as
+> the desktop version applies.
 
 ## Files
 
