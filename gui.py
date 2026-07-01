@@ -10,6 +10,7 @@ Flow: connect first (see your follower counts), then choose what to do.
 Run:  python gui.py
 """
 
+import os
 import threading
 import webbrowser
 import tkinter as tk
@@ -53,6 +54,9 @@ class App:
         self.status_dot.pack(side="left")
         self.status_var = tk.StringVar(value="Not connected")
         ttk.Label(status, textvariable=self.status_var).pack(side="left", padx=6)
+        self.counter_var = tk.StringVar(value="Followers: —   Following: —")
+        ttk.Label(status, textvariable=self.counter_var,
+                  font=("", 10, "bold")).pack(side="right", padx=6)
 
         # --- login box ----------------------------------------------------- #
         login = ttk.LabelFrame(root, text="1) Connect")
@@ -149,6 +153,12 @@ class App:
             self.status_dot.configure(fg="#27ae60" if connected else "#c0392b")
         self.root.after(0, _set)
 
+    def set_counters(self, followers, following):
+        f = "—" if followers is None else followers
+        g = "—" if following is None else following
+        txt = f"Followers: {f}   Following: {g}"
+        self.root.after(0, lambda: self.counter_var.set(txt))
+
     def ask_code(self, prompt):
         holder, done = {}, threading.Event()
 
@@ -219,7 +229,9 @@ class App:
 
     def on_connect(self):
         cfg = self._collect_cfg()
-        if "sessionid" not in cfg and not (cfg.get("username") and cfg.get("password")):
+        has_session = os.path.exists(core.SESSION_PATH)
+        if ("sessionid" not in cfg and not (cfg.get("username") and cfg.get("password"))
+                and not has_session):
             messagebox.showerror(
                 APP_TITLE,
                 "To connect: enter username AND password, or import/paste a Session ID.")
@@ -230,15 +242,17 @@ class App:
 
         def work():
             try:
-                cl, _info = core.connect(
+                cl, info = core.connect(
                     cfg, ask_code=self.ask_code, log=self.log, on_status=self.set_status)
                 self.client = cl
                 self.connected = True
+                self.set_counters(info.get("followers"), info.get("following"))
                 self.log("Connected. You can now choose an action and press Start.")
                 self.root.after(0, lambda: self.start_btn.configure(state="normal"))
             except Exception as e:
                 self.connected = False
                 self.client = None
+                self.set_counters(None, None)
                 self.log(f"ERROR: {e}")
             finally:
                 self.root.after(0, lambda: self.connect_btn.configure(state="normal"))
