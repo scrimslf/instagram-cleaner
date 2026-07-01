@@ -1,7 +1,7 @@
 name: Build Android APK
 
-# Build the Kivy app in mobile/ into a debug APK on GitHub's Linux runners.
-# Runs on manual trigger, or when anything under mobile/ changes.
+# Build the Kivy app in mobile/ into a debug APK on GitHub's Linux runners,
+# by installing Buildozer directly (no flaky third-party action).
 on:
   workflow_dispatch:
   push:
@@ -16,11 +16,27 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build the APK with Buildozer
-        uses: ArtemSBulgakov/buildozer-action@v1
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          workdir: mobile
-          command: buildozer android debug
+          python-version: "3.11"
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            git zip unzip openjdk-17-jdk python3-pip autoconf libtool \
+            pkg-config zlib1g-dev libncurses-dev cmake libffi-dev libssl-dev \
+            build-essential ccache libltdl-dev
+
+      - name: Install Buildozer
+        run: |
+          python -m pip install --upgrade pip
+          pip install buildozer "cython==0.29.36"
+
+      - name: Build debug APK
+        working-directory: mobile
+        run: buildozer android debug
 
       - name: Upload the APK
         uses: actions/upload-artifact@v4
