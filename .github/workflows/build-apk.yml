@@ -9,6 +9,11 @@ on:
       - "mobile/**"
       - ".github/workflows/build-apk.yml"
 
+# A new push cancels an in-progress build so we don't waste runner minutes.
+concurrency:
+  group: build-apk
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest

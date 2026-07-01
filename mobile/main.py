@@ -50,6 +50,23 @@ def card(title):
 
 class InstaCleanerApp(MDApp):
     def build(self):
+        try:
+            return self._build_ui()
+        except Exception:
+            # Never show a silent black screen: surface the error on screen.
+            import traceback
+            from kivy.uix.label import Label
+            from kivy.uix.scrollview import ScrollView as _SV
+            lbl = Label(text="Startup error:\n\n" + traceback.format_exc(),
+                        halign="left", valign="top", color=(1, 0.5, 0.5, 1),
+                        size_hint_y=None, padding=(dp(10), dp(10)))
+            lbl.bind(width=lambda *_: setattr(lbl, "text_size", (lbl.width, None)))
+            lbl.bind(texture_size=lambda *_: setattr(lbl, "height", lbl.texture_size[1]))
+            sv = _SV()
+            sv.add_widget(lbl)
+            return sv
+
+    def _build_ui(self):
         self.title = "Instagram Cleaner"
         self.theme_cls.theme_style = "Dark"
         self.theme_cls.primary_palette = "DeepPurple"

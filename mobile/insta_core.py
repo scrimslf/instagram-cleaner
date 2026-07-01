@@ -15,14 +15,31 @@ import random
 import time
 from datetime import date
 
-from instagrapi import Client
-from instagrapi.exceptions import (
-    ClientError,
-    LoginRequired,
-    PleaseWaitFewMinutes,
-    ChallengeRequired,
-    TwoFactorRequired,
-)
+# instagrapi is imported lazily (see _load_instagrapi) so that importing this
+# module never fails at app startup on Android — any import problem then shows
+# up as a normal error message when the user taps Connect, not a black screen.
+Client = None
+ClientError = LoginRequired = PleaseWaitFewMinutes = ChallengeRequired = \
+    TwoFactorRequired = Exception
+
+
+def _load_instagrapi():
+    global Client, ClientError, LoginRequired
+    global PleaseWaitFewMinutes, ChallengeRequired, TwoFactorRequired
+    from instagrapi import Client as _Client
+    from instagrapi.exceptions import (
+        ClientError as _ClientError,
+        LoginRequired as _LoginRequired,
+        PleaseWaitFewMinutes as _PleaseWaitFewMinutes,
+        ChallengeRequired as _ChallengeRequired,
+        TwoFactorRequired as _TwoFactorRequired,
+    )
+    Client = _Client
+    ClientError = _ClientError
+    LoginRequired = _LoginRequired
+    PleaseWaitFewMinutes = _PleaseWaitFewMinutes
+    ChallengeRequired = _ChallengeRequired
+    TwoFactorRequired = _TwoFactorRequired
 
 SAFE_LIMIT = 100
 MAX_LIMIT = 1000
@@ -69,6 +86,7 @@ class Core:
 
     # -- login ----------------------------------------------------------- #
     def connect(self, username="", password="", sessionid="", ask_code=None, log=print):
+        _load_instagrapi()
         ask = ask_code or (lambda p: "")
         cl = Client()
         cl.delay_range = [1, 3]
