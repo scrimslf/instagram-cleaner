@@ -4,3 +4,7 @@
 instagrapi>=2.18.0
 pydantic>=2.9
 pillow>=10.0.0
+
+# Optional: enables the "Import from browser" button (auto-read the sessionid
+# cookie). The app works without it; you can also paste the session id manually.
+browser_cookie3>=0.19.0

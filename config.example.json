@@ -3,6 +3,8 @@
 
   "username": "YOUR_INSTAGRAM_USERNAME",
   "password": "YOUR_PASSWORD_OR_REMOVE_THIS_LINE",
+  "_sessionid_note": "Optional and most reliable: paste a browser 'sessionid' cookie here to skip password + 2FA. Keep it secret.",
+  "sessionid": "",
 
   "daily_limit": 40,
 
