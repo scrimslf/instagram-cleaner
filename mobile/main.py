@@ -71,7 +71,7 @@ class Root(BoxLayout):
         self.add_widget(self.speed)
 
         self.limit = TextInput(text="40", input_filter="int", multiline=False,
-                               hint_text="How many (0-1000)", size_hint_y=None, height=dp(40))
+                               hint_text="Max per run (0-1000)", size_hint_y=None, height=dp(40))
         self.add_widget(self.limit)
 
         exec_row = BoxLayout(size_hint_y=None, height=dp(36), spacing=dp(8))

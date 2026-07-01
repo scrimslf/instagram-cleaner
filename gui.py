@@ -106,12 +106,12 @@ class App:
         ttk.Label(action, text="(faster = higher block risk)", foreground="#a15c00"
                   ).grid(row=1, column=2, columnspan=2, sticky="w", **pad)
 
-        ttk.Label(action, text="How many (0-1000)").grid(row=2, column=0, sticky="w", **pad)
+        ttk.Label(action, text="Max per run (0-1000)").grid(row=2, column=0, sticky="w", **pad)
         self.limit = tk.IntVar(value=40)
         ttk.Spinbox(action, from_=0, to=core.MAX_LIMIT, textvariable=self.limit, width=8
                     ).grid(row=2, column=1, sticky="w", **pad)
-        ttk.Label(action, text="(100 = risk ceiling; higher is riskier)", foreground="#a15c00"
-                  ).grid(row=2, column=2, columnspan=2, sticky="w", **pad)
+        ttk.Label(action, text="per launch — re-run to continue (100 = risk ceiling)",
+                  foreground="#a15c00").grid(row=2, column=2, columnspan=2, sticky="w", **pad)
 
         self.execute = tk.BooleanVar(value=False)
         ttk.Checkbutton(action, text="Execute for real (unticked = simulation / dry-run)",
