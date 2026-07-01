@@ -26,6 +26,11 @@ android.permissions = INTERNET
 # Android build targets (safe defaults; bump if needed).
 android.api = 34
 android.minapi = 24
+android.ndk = 25b
+# Pin build-tools: buildozer otherwise auto-picks a non-existent version
+# (e.g. 37.0.0) and the SDK install fails with "build-tools folder not found".
+android.build_tools = 34.0.0
+android.accept_sdk_license = True
 android.archs = arm64-v8a, armeabi-v7a
 
 # Keep it simple: no services, no extra assets.

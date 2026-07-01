@@ -50,7 +50,8 @@ class App:
         # --- status bar (connection + follower counter) -------------------- #
         status = ttk.Frame(root)
         status.pack(fill="x", padx=8, pady=(8, 0))
-        self.status_dot = tk.Label(status, text="●", fg="#c0392b")
+        self.status_dot = ttk.Label(status, text="●", font=("", 14))
+        self.status_dot.configure(foreground="#e05561")
         self.status_dot.pack(side="left")
         self.status_var = tk.StringVar(value="Not connected")
         ttk.Label(status, textvariable=self.status_var).pack(side="left", padx=6)
@@ -84,7 +85,8 @@ class App:
         ttk.Button(row, text="Open Instagram", command=self.open_instagram).pack(side="left", padx=6)
         ttk.Button(row, text="How?", command=self.show_sessionid_help).pack(side="left")
 
-        self.connect_btn = ttk.Button(login, text="Connect", command=self.on_connect)
+        self.connect_btn = ttk.Button(login, text="Connect", style="Accent.TButton",
+                                      command=self.on_connect)
         self.connect_btn.grid(row=5, column=1, sticky="w", **pad)
 
         # --- action box ---------------------------------------------------- #
@@ -123,13 +125,17 @@ class App:
 
         btns = ttk.Frame(action)
         btns.grid(row=5, column=0, columnspan=4, sticky="w", **pad)
-        self.start_btn = ttk.Button(btns, text="Start", command=self.on_start, state="disabled")
+        self.start_btn = ttk.Button(btns, text="Start", style="Accent.TButton",
+                                    command=self.on_start, state="disabled")
         self.start_btn.pack(side="left")
         self.stop_btn = ttk.Button(btns, text="Stop", command=self.on_stop, state="disabled")
         self.stop_btn.pack(side="left", padx=6)
 
         # --- console ------------------------------------------------------- #
-        self.console = scrolledtext.ScrolledText(root, height=14, state="disabled", wrap="word")
+        self.console = scrolledtext.ScrolledText(root, height=14, state="disabled", wrap="word",
+                                                 borderwidth=0, relief="flat")
+        self.console.configure(background="#1b1b1b", foreground="#dcdcdc",
+                               insertbackground="#dcdcdc", font=("Consolas", 9))
         self.console.pack(fill="both", expand=True, padx=8, pady=(0, 8))
 
         self.log(
@@ -150,7 +156,7 @@ class App:
     def set_status(self, text, connected):
         def _set():
             self.status_var.set(text)
-            self.status_dot.configure(fg="#27ae60" if connected else "#c0392b")
+            self.status_dot.configure(foreground="#3fb950" if connected else "#e05561")
         self.root.after(0, _set)
 
     def set_counters(self, followers, following):
@@ -340,6 +346,12 @@ class App:
 def main():
     root = tk.Tk()
     App(root)
+    try:
+        import sv_ttk
+        sv_ttk.set_theme("dark")  # modern Windows 11-style dark theme
+    except Exception:
+        pass  # falls back to the default ttk look if sv-ttk isn't installed
+    root.geometry("720x760")
     root.mainloop()
 
 
