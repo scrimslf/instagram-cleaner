@@ -6,7 +6,9 @@ targets_cache*.json
 
 # Python
 .venv/
+.venv*/
 venv/
+env/
 __pycache__/
 *.pyc
 

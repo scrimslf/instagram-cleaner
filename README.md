@@ -137,6 +137,12 @@ All of the above are in `.gitignore`.
 
 ## Troubleshooting
 
+- **"Import from browser" finds nothing / needs admin** — recent Brave/Chrome
+  encrypt their cookies, so reading them needs administrator rights. On Windows,
+  launch with `run_gui_admin.bat` (accept the UAC prompt) and the auto-import
+  works. Otherwise paste the `sessionid` manually (button "How?"), or log into
+  Instagram in Firefox (its cookies read without admin).
+
 - **"Two-factor authentication required"** — enter the 6-digit code from your
   authenticator app (or SMS) when prompted. If you use SMS and never receive it,
   your 2FA phone number may be outdated: fix it in the Instagram app

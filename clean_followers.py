@@ -295,6 +295,7 @@ def sessionid_from_browser(preferred=None):
     if preferred:
         candidates.sort(key=lambda c: c[0].lower() != preferred.lower())
 
+    errors = []
     for name, fn in candidates:
         if not fn:
             continue
@@ -303,8 +304,21 @@ def sessionid_from_browser(preferred=None):
             for cookie in jar:
                 if cookie.name == "sessionid" and cookie.value:
                     return cookie.value, name
-        except Exception:
+        except Exception as e:
+            errors.append((name, e))
             continue
+
+    # Recent Brave/Chrome encrypt cookies; reading them needs admin rights.
+    needs_admin = any(
+        type(e).__name__ == "RequiresAdminError" or "admin" in str(e).lower()
+        for _, e in errors
+    )
+    if needs_admin:
+        raise RuntimeError(
+            "Your browser encrypts its cookies (recent Brave/Chrome). To auto-import, "
+            "run this app as administrator. Otherwise, paste the session id manually "
+            "(click 'How?'), or log into Instagram in Firefox and import from there."
+        )
     return None, None
 
 
