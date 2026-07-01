@@ -1,0 +1,17 @@
+# Secrets & personal data — NEVER commit these
+config.json
+session.json
+state.json
+targets_cache.json
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

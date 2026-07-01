@@ -1,0 +1,19 @@
+{
+  "_comment": "Copy this file to config.json (git-ignored) and edit if you want. Every field is OPTIONAL. If you leave out username/password you'll be asked for them at runtime (password stays hidden and is never written to disk).",
+
+  "username": "YOUR_INSTAGRAM_USERNAME",
+  "password": "YOUR_PASSWORD_OR_REMOVE_THIS_LINE",
+
+  "daily_limit": 40,
+
+  "min_delay_seconds": 25,
+  "max_delay_seconds": 70,
+
+  "long_pause_every": 15,
+  "long_pause_min_seconds": 240,
+  "long_pause_max_seconds": 600,
+
+  "whitelist": [],
+
+  "dry_run": true
+}

@@ -1,0 +1,6 @@
+# instagrapi drives the private Instagram API.
+# Note: instagrapi 2.1.x pins an old pydantic that will NOT build on Python 3.13+
+# (pydantic-core has no wheel there). 2.18+ works with modern pydantic.
+instagrapi>=2.18.0
+pydantic>=2.9
+pillow>=10.0.0
