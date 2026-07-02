@@ -1,184 +1,123 @@
-# Instagram Non-Follower Cleaner
+# Instagram Cleaner
 
-A small, careful command-line tool that **removes the Instagram accounts that
-follow you but that you don't follow back** ("remove follower"), with a limit
-you choose and human-like delays to reduce the risk of being blocked.
+Remove the Instagram accounts that **follow you but that you don't follow back**,
+or **unfollow** the people you follow — safely, with a limit you choose and
+human-like delays. Available as a **Windows/macOS/Linux desktop app** and an
+**Android app**.
+
+[![Latest release](https://img.shields.io/github/v/release/scrimslf/instagram-cleaner)](https://github.com/scrimslf/instagram-cleaner/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/scrimslf/instagram-cleaner/total)](https://github.com/scrimslf/instagram-cleaner/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+![Platforms](https://img.shields.io/badge/platforms-Android%20%7C%20Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)
 
 > ⚠️ **Read this first.** Automating actions violates Instagram's Terms of
 > Service. Even with every precaution here, a **temporary block or a permanent
-> suspension is possible**. Use it on your own account, at your own risk, and
-> go slow. If Instagram shows a security "challenge" or a "please wait a few
-> minutes" message, **stop for a few days**.
+> suspension is possible**. Use it on your own account, at your own risk, and go
+> slow. If Instagram shows a security "challenge" or a "please wait" message,
+> **stop for a few days**.
 
-## Features
+---
 
-- 🧪 **Dry-run by default** — see exactly who *would* be removed before anything happens.
-- 🔢 **Pick how many** — `--limit` accepts **0 to 1000**. **100 is the recommended
-  safe ceiling**; going higher prints a warning and asks for confirmation.
-- 🔐 **2FA handled for you** — if two-factor auth is on, the tool asks for your
-  6-digit code in the terminal. Security challenges (SMS/email codes) are handled too.
-- ♻️ **Session reuse** — you only log in (and do 2FA) once; later runs are instant.
-- ⏸️ **Human-like pacing** — randomized delays and periodic long pauses.
-- 📌 **Resumable** — it remembers who was already removed and respects a daily count.
-- ✅ **Whitelist** — accounts you never want removed.
-- 🔒 **No secrets on disk** — your password is entered hidden (`getpass`) and never
-  written to a file (unless *you* choose to put it in `config.json`, which is git-ignored).
+## ⬇️ Get it
 
-## Graphical interface (easiest)
+| Platform | How to get it |
+|----------|---------------|
+| 🤖 **Android** | **[⬇️ Download the APK](https://github.com/scrimslf/instagram-cleaner/releases/latest/download/InstagramCleaner-Material.apk)** — open this link on your phone, install, done. |
+| 🪟 **Windows** / 🍎 **macOS** / 🐧 **Linux** | Run the desktop app — see [Desktop install](#-desktop-windows--macos--linux) below. |
 
-Prefer clicking to typing commands? After installing (below), run:
+<p align="center">
+  <img src="docs/screenshot-android.png" width="300" alt="Instagram Cleaner on Android">
+</p>
+
+---
+
+## 🤖 Android
+
+1. On your phone, open the **[Download APK](https://github.com/scrimslf/instagram-cleaner/releases/latest/download/InstagramCleaner-Material.apk)** link.
+2. Open the downloaded `.apk` file.
+3. Allow **"install from unknown sources"** if Android asks.
+4. Open **Instagram Cleaner** and log in (see [Logging in](#-logging-in)).
+
+*It's a debug APK for sideloading (not on the Play Store, which forbids
+Instagram automation). It runs entirely on your phone — nothing is uploaded.*
+
+## 🪟 Desktop (Windows / macOS / Linux)
+
+**Install (once):**
+
+```bash
+git clone https://github.com/scrimslf/instagram-cleaner.git
+cd instagram-cleaner
+# Windows:
+.\setup.ps1
+# macOS / Linux:
+bash setup.sh
+```
+
+**Run the graphical app:**
 
 ```bash
 python gui.py
 ```
+On Windows you can also double-click **`run_gui.bat`** (or `run_gui_admin.bat`
+to let "Import from browser" read your cookies).
 
-A small native window opens: fill in your username/password, pick how many to
-remove (0–1000), leave **Execute** unticked for a safe simulation, and press
-**Start**. If Instagram asks for a 2FA code, a popup appears. A **Stop** button
-lets you halt at any time. The GUI uses **Tkinter**, which ships with Python —
-no extra install, no browser, barely any RAM.
+**Or use the command line:**
 
-## Requirements
-
-- Python **3.10+** (tested on 3.14)
-- An Instagram account
-- For the GUI on Linux only: Tkinter may need `sudo apt install python3-tk`
-  (it's already included in the official Windows/macOS Python installers)
-
-## Install
-
-**Windows (PowerShell):**
-```powershell
-cd instagram-cleaner
-.\setup.ps1
-```
-
-**macOS / Linux:**
 ```bash
-cd instagram-cleaner
-bash setup.sh
+python clean_followers.py                               # dry-run, remove non-followers
+python clean_followers.py --mode unfollow-nonmutual     # dry-run, unfollow non-mutuals
+python clean_followers.py --limit 40 --execute          # actually act on up to 40
 ```
 
-Or manually:
-```bash
-python -m venv .venv
-# Windows:  .\.venv\Scripts\activate
-# macOS/Linux:  source .venv/bin/activate
-pip install -r requirements.txt
-```
+---
 
-## Usage
+## ✨ Features
 
-Everything is a dry-run until you add `--execute`.
+- 🧪 **Dry-run by default** — see who *would* be affected before anything happens.
+- 🎯 **Three modes** — remove followers you don't follow back, unfollow non-mutuals,
+  or unfollow everyone you follow.
+- 🔢 **Pick how many** — 0 to 1000 per run. **100 is the recommended safe ceiling**;
+  above that you get a warning.
+- 🐢 **Speed presets** — Safe / Medium / Fast (faster = higher block risk).
+- 🔐 **2FA handled** — enter your code in-app; security challenges handled too.
+- ♻️ **Session reuse** — log in once; later runs are instant.
+- ⏸️ **Human-like pacing** + resumable progress + a whitelist.
+- 🔒 **No server, no secrets uploaded** — everything runs on your device.
 
-**1. See who would be removed (safe, changes nothing):**
-```bash
-python clean_followers.py
-```
-You'll be asked for your username and password (password is hidden). If 2FA is
-on, enter the 6-digit code when prompted. A session is then saved so you won't
-be asked again.
+## 🔑 Logging in
 
-**2. Actually remove, choosing how many:**
-```bash
-python clean_followers.py --limit 40 --execute
-```
+Two ways, in the app:
 
-**3. Recompute the follower/following lists (e.g. after a few days):**
-```bash
-python clean_followers.py --refresh
-```
+- **Browser session (most reliable):** log into instagram.com in your browser,
+  copy the `sessionid` cookie, and paste it in the app. On desktop, the
+  **"Import from browser"** button can grab it automatically (run as admin on
+  recent Brave/Chrome, which encrypt cookies).
+- **Username + password:** a prompt asks for your 2FA code if needed.
 
-### Options
+Your login is stored **only on your device** (`session.json`) and never uploaded.
 
-| Flag | Meaning |
-|------|---------|
-| `--limit N` | How many to remove this run. **0–1000**, default 40. Over **100** triggers a warning. |
-| `--execute` | Actually remove. Without it, it's a dry-run. |
-| `--dry-run` | Force dry-run even if `config.json` enables execution. |
-| `--refresh` | Recompute followers/following from Instagram (ignores the cache). |
-| `--yes` | Skip confirmation prompts (use with care). |
+## 🛡️ Staying safe
 
-### Choosing a safe number
+- Start with a **low number (30–50)** for the first days, at **Safe** speed.
+- **Run once a day.** The tool remembers what it already did.
+- Stay **at or below 100** per run.
+- On any Instagram "challenge" / "please wait", **stop for a few days**.
 
-- **0–50** — safest, good for the first days.
-- **~100** — the practical ceiling. This is the risk boundary; staying at or
-  below it is strongly recommended.
-- **101–1000** — allowed, but each step up raises the odds of a temporary block
-  or suspension. The tool warns and asks you to confirm.
+## 🧑‍💻 Build from source
 
-**Run at most once a day**, ideally from your usual device and home network. A
-brand-new IP or an unusual location makes Instagram far more likely to block the
-login.
+- **Android APK:** built automatically by GitHub Actions
+  ([`.github/workflows/build-apk.yml`](.github/workflows/build-apk.yml)); grab the
+  artifact, or build locally — see [`mobile/README.md`](mobile/README.md).
+- **Desktop:** pure Python — `pip install -r requirements.txt` then `python gui.py`.
 
-## Configuration (optional)
+## 📁 Generated files (never committed)
 
-You don't need a config file — the tool asks for what it needs. But you can copy
-`config.example.json` to `config.json` (git-ignored) to set defaults:
+`session.json` (your login), `state.json` (progress), `targets_cache_*.json`,
+`config.json` (optional settings). All are in `.gitignore`.
 
-| Key | Role |
-|-----|------|
-| `username` / `password` | Skip the prompts. Leave `password` out to keep being asked (recommended). |
-| `daily_limit` | Default for `--limit`. |
-| `min_delay_seconds` / `max_delay_seconds` | Random delay between actions. |
-| `long_pause_every` | Take a long pause every N actions. |
-| `long_pause_min_seconds` / `long_pause_max_seconds` | Length of the long pause. |
-| `whitelist` | Usernames or IDs to **never** remove. |
-| `dry_run` | `true` = simulate (still overridable by `--execute`/`--dry-run`). |
+## ⚖️ Disclaimer
 
-## Generated files (never commit these)
-
-- `session.json` — your saved login session.
-- `state.json` — progress: who was removed, today's counter.
-- `targets_cache.json` — the computed target list.
-- `config.json` — your settings (may contain your password).
-
-All of the above are in `.gitignore`.
-
-## Troubleshooting
-
-- **"Import from browser" finds nothing / needs admin** — recent Brave/Chrome
-  encrypt their cookies, so reading them needs administrator rights. On Windows,
-  launch with `run_gui_admin.bat` (accept the UAC prompt) and the auto-import
-  works. Otherwise paste the `sessionid` manually (button "How?"), or log into
-  Instagram in Firefox (its cookies read without admin).
-
-- **"Two-factor authentication required"** — enter the 6-digit code from your
-  authenticator app (or SMS) when prompted. If you use SMS and never receive it,
-  your 2FA phone number may be outdated: fix it in the Instagram app
-  (Settings → Accounts Center → Password and security → Two-factor
-  authentication), ideally switching to an **authenticator app**.
-- **"Security challenge"** — open the Instagram app, approve the login, wait, retry.
-- **"Please wait a few minutes"** — you're being rate-limited. Stop for the day.
-- **Install fails building `pydantic-core`** — you're on a Python version too new
-  for the pinned deps. This project uses `instagrapi>=2.18` + `pydantic>=2.9`
-  specifically to avoid that.
-
-## Mobile app (Android)
-
-An experimental Kivy-based Android app lives in [`mobile/`](mobile/). The source
-is ready to build into an APK (via Docker); see `mobile/README.md`. It runs the
-same logic on your phone, so it uses your phone's residential IP.
-
-Honest notes on feasibility:
-
-- **Android (.apk): feasible.** The logic can be wrapped with
-  [Kivy](https://kivy.org) + `buildozer` (or BeeWare) so `instagrapi` runs
-  **on the phone itself**. That's actually ideal here: the phone's residential
-  IP is far less likely to be blocked than a cloud server IP.
-- **iOS: hard.** The App Store will almost certainly reject an app that
-  automates Instagram (it breaks Instagram's ToS). Realistic options are a
-  personal sideload via a developer certificate or TestFlight only.
-- **Avoid a cloud backend that logs in for users.** Logging in from a data
-  center IP is exactly what gets connections blocked. Keep the login on the
-  user's own device/network.
-
-The core (`clean_followers.run(...)` with pluggable `log` / `ask_code` /
-`should_stop` callbacks) is already UI-agnostic, so a Kivy front-end can reuse
-it directly.
-
-## Disclaimer
-
-This project is provided "as is" under the MIT License, with no warranty. It is
-not affiliated with, endorsed by, or connected to Instagram or Meta. You are
-solely responsible for how you use it and for any consequences to your account.
+Provided "as is" under the MIT License, with no warranty. Not affiliated with,
+endorsed by, or connected to Instagram or Meta. You are solely responsible for
+how you use it and for any consequences to your account.
