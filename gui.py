@@ -190,7 +190,10 @@ class App:
 
     # -- login helpers ------------------------------------------------------- #
     def open_instagram(self):
-        webbrowser.open("https://www.instagram.com/accounts/login/")
+        try:
+            webbrowser.open("https://www.instagram.com/accounts/login/")
+        except Exception as e:
+            self.log(f"Could not open the browser: {e}")
 
     def show_sessionid_help(self):
         messagebox.showinfo("Log in with your browser", SESSIONID_HELP)

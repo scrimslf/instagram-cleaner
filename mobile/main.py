@@ -110,8 +110,9 @@ class InstaCleanerApp(MDApp):
         row.add_widget(MDFlatButton(text="Open Instagram", on_release=self.open_instagram))
         row.add_widget(MDFlatButton(text="How?", on_release=self.show_help))
         login.add_widget(row)
-        login.add_widget(MDRaisedButton(text="Connect", pos_hint={"center_x": 0.5},
-                                        on_release=self.on_connect))
+        self.connect_btn = MDRaisedButton(text="Connect", pos_hint={"center_x": 0.5},
+                                          on_release=self.on_connect)
+        login.add_widget(self.connect_btn)
         content.add_widget(login)
 
         # --- action card ---------------------------------------------------
@@ -250,8 +251,22 @@ class InstaCleanerApp(MDApp):
 
     # -- login / actions ----------------------------------------------------
     def open_instagram(self, *_):
-        import webbrowser
-        webbrowser.open("https://www.instagram.com/accounts/login/")
+        url = "https://www.instagram.com/accounts/login/"
+        # On Android, python's webbrowser doesn't work; use a native intent.
+        try:
+            from jnius import autoclass
+            Intent = autoclass("android.content.Intent")
+            Uri = autoclass("android.net.Uri")
+            PythonActivity = autoclass("org.kivy.android.PythonActivity")
+            intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            PythonActivity.mActivity.startActivity(intent)
+        except Exception:
+            try:
+                import webbrowser
+                webbrowser.open(url)
+            except Exception as e:
+                self.log("Could not open the browser: %s" % e)
 
     def show_help(self, *_):
         self._dialog = MDDialog(
@@ -267,6 +282,7 @@ class InstaCleanerApp(MDApp):
         if not s and not (u and p):
             self.log("Enter username+password, or paste a session id.")
             return
+        self.connect_btn.disabled = True
         self.start_btn.disabled = True
 
         def work():
@@ -282,6 +298,8 @@ class InstaCleanerApp(MDApp):
                 self.set_status("Not connected", False)
                 self.set_counters(None, None)
                 self.log("ERROR: %s" % e)
+            finally:
+                Clock.schedule_once(lambda *_: setattr(self.connect_btn, "disabled", False))
 
         threading.Thread(target=work, daemon=True).start()
 
